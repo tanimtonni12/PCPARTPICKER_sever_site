@@ -52,7 +52,6 @@ async function run() {
             }
         }
 
-
         app.get('/tools', async (req, res) => {
             const query = {};
             const cursor = toolsCollection.find(query);
@@ -62,7 +61,6 @@ async function run() {
         });
         //find one
         app.get('/tools/:id', verifyJWT, async (req, res) => {
-            console.log(req.params.id)
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
             const tool = await toolsCollection.findOne(query);
