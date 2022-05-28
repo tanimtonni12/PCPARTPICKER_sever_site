@@ -194,9 +194,6 @@ async function run() {
         });
 
 
-
-
-
         app.patch('/myorder/:id', verifyJWT, async (req, res) => {
             const id = req.params.id;
             const payment = req.body;
@@ -221,12 +218,14 @@ async function run() {
             const order = await orderCollection.find(query).toArray();
             res.send(order);
         });
+
         app.delete('/myorder/:id', verifyJWT, async (req, res) => {
             const id = req.params.id;
             const filter = { _id: ObjectId(id) };
             const result = await orderCollection.deleteOne(filter);
             res.send({ result, success: true });
         })
+
         app.get('/myorder/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
