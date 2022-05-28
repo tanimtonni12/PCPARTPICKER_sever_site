@@ -86,6 +86,14 @@ async function run() {
             const users = await userCollection.find().toArray();
             res.send(users);
         });
+        app.delete('/user/:id', verifyJWT, verifyAdmin, async (req, res) => {
+            const id = req.params.id;
+
+            const filter = { _id: ObjectId(id) };
+            const result = await userCollection.deleteOne(filter);
+            console.log(result)
+            res.send({ result, success: true });
+        })
 
         app.put('/user/:email', async (req, res) => {
             const email = req.params.email;
@@ -141,6 +149,13 @@ async function run() {
 
             res.send({ order, success: true });
         });
+        app.delete('/order/:id', verifyJWT, verifyAdmin, async (req, res) => {
+
+            const id = req.params.id;
+            const filter = { _id: ObjectId(id) };
+            const result = await orderCollection.deleteOne(filter);
+            res.send({ result, success: true });
+        })
 
 
         app.post('/create-payment-intent', verifyJWT, async (req, res) => {
@@ -183,10 +198,9 @@ async function run() {
             res.send(order);
         });
         app.delete('/myorder/:id', verifyJWT, async (req, res) => {
-            console.log(id)
             const id = req.params.id;
             const filter = { _id: ObjectId(id) };
-            const result = await toolsCollection.deleteOne(filter);
+            const result = await orderCollection.deleteOne(filter);
             res.send({ result, success: true });
         })
         app.get('/myorder/:id', async (req, res) => {
@@ -198,7 +212,6 @@ async function run() {
         //add review
         app.post('/addReview', async (req, res) => {
             const result = await reviewCollection.insertOne(req.body);
-            // console.log(result);
             res.send(result);
         });
         app.get('/reviews', async (req, res) => {
