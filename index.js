@@ -92,24 +92,34 @@ async function run() {
 
         //     res.send({ user })
         // })
-        //update user
-        app.put('/user/email', async (req, res) => {
-            const email = req.query.email;
-            const updatedUser = req.body;
+
+
+
+        // Create users ====>>
+        app.put("user/:email", async (req, res) => {
+            const email = req.params.email;
+            const user = req.body;
             const filter = { email: email };
             const options = { upsert: true };
-            const updatedDoc = {
-                $set: {
-                    updatedUser: linkin,
-                    updatedUser: profession,
-                    updatedUser: phone,
-                    updatedUser: address
-                }
+            const updateDoc = {
+                $set: user,
             };
-            const result = await userCollection.updateOne(filter, updatedDoc, options);
-            res.send({ result, success: true });
+            const result = await userCollection.updateOne(filter, updateDoc, options);
 
-        })
+            res.send(result);
+        });
+
+        // Get user From Email
+        app.get("/user/one", verifyJWT, async (req, res) => {
+            const email = req.query.email;
+            console.log(req.query)
+
+            const result = await userCollection.findOne({ email: email });
+            res.send(result);
+        });
+
+
+
 
         app.delete('/user/:id', verifyJWT, verifyAdmin, async (req, res) => {
             const id = req.params.id;
