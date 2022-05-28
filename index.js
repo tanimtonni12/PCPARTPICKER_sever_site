@@ -86,6 +86,31 @@ async function run() {
             const users = await userCollection.find().toArray();
             res.send(users);
         });
+        // app.get('/user/:email', async (req, res) => {
+        //     const email = req.params.email;
+        //     const user = await userCollection.findOne({ email: email });
+
+        //     res.send({ user })
+        // })
+        //update user
+        app.put('/user/email', async (req, res) => {
+            const email = req.query.email;
+            const updatedUser = req.body;
+            const filter = { email: email };
+            const options = { upsert: true };
+            const updatedDoc = {
+                $set: {
+                    updatedUser: linkin,
+                    updatedUser: profession,
+                    updatedUser: phone,
+                    updatedUser: address
+                }
+            };
+            const result = await userCollection.updateOne(filter, updatedDoc, options);
+            res.send({ result, success: true });
+
+        })
+
         app.delete('/user/:id', verifyJWT, verifyAdmin, async (req, res) => {
             const id = req.params.id;
 
